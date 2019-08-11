@@ -1,15 +1,15 @@
-const Customers = require('../models').contacts;
+const Customers = require('../models').customers;
 
 module.exports = {
   async create(req, res) {
     try {
-      const contact = await Customers.create({
+      const customer = await Customers.create({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         phone: req.body.phone,
         billId: req.params.billId
       });
-      return res.status(201).send(contact);
+      return res.status(201).send(customer);
     } catch (error) {
       console.log(error);
       return res.status(400).send(error);

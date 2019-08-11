@@ -1,5 +1,5 @@
 const Bill = require('../models').Bill;
-const Customers = require('../models').contacts;
+const Customers = require('../models').customers;
 
 module.exports = {
   async create(req, res) {

@@ -1,7 +1,7 @@
 const bill = require('./bill');
-const contacts = require('./contacts');
+const customers = require('./customers');
 
 module.exports = {
   bill,
-  contacts
+  customers
 };

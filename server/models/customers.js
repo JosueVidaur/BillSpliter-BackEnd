@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Contacts = sequelize.define('contacts', {
+  const Customers = sequelize.define('customers', {
     firstName: {
       type: DataTypes.STRING,
       allowNull: false
@@ -18,12 +18,12 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 0
     }
   });
-  Contacts.associate = models => {
-    Contacts.belongsTo(models.Bill, {
+  Customers.associate = models => {
+    Customers.belongsTo(models.Bill, {
       foreignKey: 'billId',
       onDelete: 'CASCADE'
     });
     // associations can be defined here
   };
-  return Contacts;
+  return Customers;
 };
