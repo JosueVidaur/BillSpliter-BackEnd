@@ -20,7 +20,7 @@ module.exports = {
         allowNull: false
       },
       amount: {
-        type: Sequelize.NUMBER,
+        type: Sequelize.FLOAT,
         allowNull: false
       },
       createdAt: {
@@ -35,7 +35,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
         references: {
-          model: 'bill',
+          model: 'Bills',
           key: 'id',
           as: 'billId'
         }

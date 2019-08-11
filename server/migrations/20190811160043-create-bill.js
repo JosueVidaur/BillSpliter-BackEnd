@@ -8,11 +8,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       place: {
-        type: Sequelize.STRING.BOOLEAN,
+        type: Sequelize.STRING,
         allowNull: false
       },
       totalAmount: {
-        type: Sequelize.NUMBER,
+        type: Sequelize.FLOAT,
         allowNull: false
       },
       completed: {

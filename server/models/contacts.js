@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const contacts = sequelize.define('contacts', {
+  const Contacts = sequelize.define('contacts', {
     firstName: {
       type: DataTypes.STRING,
       allowNull: false
@@ -13,16 +13,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     amount: {
-      type: DataTypes.NUMBER,
-      allowNull: false
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0
     }
   });
-  contacts.associate = models => {
-    contact.belongsTo(models.Bill, {
-      foreignKey: 'BillId',
+  Contacts.associate = models => {
+    Contacts.belongsTo(models.Bill, {
+      foreignKey: 'billId',
       onDelete: 'CASCADE'
     });
     // associations can be defined here
   };
-  return contacts;
+  return Contacts;
 };
