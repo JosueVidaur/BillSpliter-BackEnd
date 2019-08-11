@@ -63,18 +63,29 @@ module.exports = {
           message: 'Bill Not Found'
         });
       }
-      try {
-        bill.update({
-          place: req.body.place,
-          totalAmount: req.body.totalAmount
-        });
-        return res.status(200).send(bill);
-      } catch (error) {
-        console.log(error);
-        return res.status(400).send(error);
-      }
+      await bill.update({
+        place: req.body.place,
+        totalAmount: req.body.totalAmount
+      });
+      return res.status(200).send(bill);
     } catch (error) {
-      console.log(error);
+      return res.status(400).send(error);
+    }
+  },
+  async delete(req, res) {
+    try {
+      const bill = await Bill.findByPk(req.params.billId);
+      console.log('deleting', bill);
+      if (!bill) {
+        return res.status(404).send({
+          message: 'Bill Not Found'
+        });
+      }
+      await bill.destroy();
+      return res.status(200).send({
+        message: 'Bill deleted successfully'
+      });
+    } catch (error) {
       return res.status(400).send(error);
     }
   }

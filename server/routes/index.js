@@ -13,4 +13,7 @@ module.exports = app => {
   app.post('/api/bills/:billId/customers', customersController.create);
   app.get('/api/bills/:billId', billController.retrieve);
   app.put('/api/bills/:billId', billController.update);
+  app.delete('/app/bills/:billId', billController.delete);
+  app.put('/api/bills/:customerId/:billId', customersController.update);
+  app.delete('/api/bills/:customerId/:billId', customersController.delete);
 };
