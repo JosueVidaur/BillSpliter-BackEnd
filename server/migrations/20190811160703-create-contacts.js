@@ -41,5 +41,6 @@ module.exports = {
         }
       }
     }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('contacts')
+  down: (queryInterface /* , Sequelize */) =>
+    queryInterface.dropTable('contacts')
 };
