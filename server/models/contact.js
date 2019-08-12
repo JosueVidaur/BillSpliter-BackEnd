@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     contact.hasMany(models.customers, {
       foreignKey: 'contactId',
-      as: 'customer'
+      as: 'customers'
     });
     // associations can be defined here
   };
