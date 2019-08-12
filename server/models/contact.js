@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Customers = sequelize.define('customers', {
+  const contact = sequelize.define('contact', {
     firstName: {
       type: DataTypes.STRING,
       allowNull: false
@@ -11,21 +11,18 @@ module.exports = (sequelize, DataTypes) => {
     phone: {
       type: DataTypes.STRING,
       allowNull: false
-    },
-    amount: {
-      type: DataTypes.FLOAT,
-      allowNull: false
     }
   });
-  Customers.associate = models => {
-    Customers.belongsTo(models.Bill, {
-      foreignKey: 'billId',
+  contact.associate = models => {
+    contact.belongsTo(models.user, {
+      foreignKey: 'userId',
       onDelete: 'CASCADE'
     });
-    Customers.belongsTo(models.contact, {
+    contact.hasMany(models.customers, {
       foreignKey: 'contactId',
-      onDelete: 'CASCADE'
+      as: 'customer'
     });
+    // associations can be defined here
   };
-  return Customers;
+  return contact;
 };
