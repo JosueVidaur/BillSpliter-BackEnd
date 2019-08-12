@@ -1,5 +1,6 @@
 const billController = require('../controllers').bill;
 const customersController = require('../controllers').customers;
+const userController = require('../controllers').user;
 
 module.exports = app => {
   app.get('/api', (req, res) =>
@@ -16,4 +17,5 @@ module.exports = app => {
   app.delete('/api/bills/:billId', billController.delete);
   app.put('/api/bills/:customerId/:billId', customersController.update);
   app.delete('/api/bills/:customerId/:billId', customersController.delete);
+  app.post('/api/login', userController.create);
 };
