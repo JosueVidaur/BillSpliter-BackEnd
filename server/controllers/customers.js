@@ -3,13 +3,18 @@ const Customers = require('../models').customers;
 module.exports = {
   async create(req, res) {
     try {
-      const customer = await Customers.create({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        phone: req.body.phone,
-        billId: req.params.billId
-      });
-      return res.status(201).send(customer);
+      req.body.contacts.forEach(
+        async contact =>
+          await Customers.create({
+            firstName: contact.firstName,
+            lastName: contact.lastName,
+            phone: contact.phone,
+            amount: contact.amount,
+            billId: req.params.billId,
+            contactId: contact.id
+          })
+      );
+      return res.status(201).send(true);
     } catch (error) {
       console.log(error);
       return res.status(400).send(error);

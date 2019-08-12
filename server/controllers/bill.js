@@ -6,7 +6,8 @@ module.exports = {
     try {
       const bill = await Bill.create({
         place: req.body.place,
-        totalAmount: req.body.totalAmount
+        totalAmount: req.body.totalAmount,
+        userId: req.params.userId
       });
       return res.status(201).send(bill);
     } catch (error) {
@@ -16,6 +17,9 @@ module.exports = {
   async list(req, res) {
     try {
       const bill = await Bill.findAll({
+        where: {
+          userId: req.params.userId
+        },
         include: [
           {
             model: Customers,
