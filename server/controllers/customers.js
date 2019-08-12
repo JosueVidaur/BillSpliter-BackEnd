@@ -1,25 +1,6 @@
 const Customers = require('../models').customers;
 
 module.exports = {
-  async create(req, res) {
-    try {
-      req.body.contacts.forEach(
-        async contact =>
-          await Customers.create({
-            firstName: contact.firstName,
-            lastName: contact.lastName,
-            phone: contact.phone,
-            amount: contact.amount,
-            billId: req.params.billId,
-            contactId: contact.id
-          })
-      );
-      return res.status(201).send(true);
-    } catch (error) {
-      console.log(error);
-      return res.status(400).send(error);
-    }
-  },
   async update(req, res) {
     try {
       const customer = await Customers.findOne({

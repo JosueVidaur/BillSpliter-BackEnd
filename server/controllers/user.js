@@ -19,7 +19,7 @@ module.exports = {
   },
   async list(req, res) {
     try {
-      const user = await User.findAll({
+      const user = await User.findByPk(req.params.userId, {
         include: [
           {
             model: Contact,
@@ -37,6 +37,11 @@ module.exports = {
           }
         ]
       });
+      if (!user) {
+        return res.status(404).send({
+          message: 'User doesn`t exist'
+        });
+      }
       return res.status(200).send(user);
     } catch (error) {
       return res.status(400).send(error);

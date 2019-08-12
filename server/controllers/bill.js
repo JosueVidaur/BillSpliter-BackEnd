@@ -9,6 +9,19 @@ module.exports = {
         totalAmount: req.body.totalAmount,
         userId: req.params.userId
       });
+      console.log(typeof bill.id, bill);
+      const contacts = req.body.contacts;
+      contacts.forEach(
+        async contact =>
+          await Customers.create({
+            firstName: contact.firstName,
+            lastName: contact.lastName,
+            phone: contact.phone,
+            amount: contact.amount,
+            billId: bill.id,
+            contactId: contact.contactId
+          })
+      );
       return res.status(201).send(bill);
     } catch (error) {
       return res.status(400).send(error);

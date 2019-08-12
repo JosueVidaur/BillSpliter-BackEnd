@@ -12,7 +12,6 @@ module.exports = app => {
 
   app.post('/api/bills/:userId', billController.create);
   app.get('/api/bills/:userId', billController.list);
-  app.post('/api/bills/:billId/customers', customersController.create);
   // app.get('/api/bills/:billId', billController.retrieve);
   app.put('/api/bills/:billId', billController.update);
   app.delete('/api/bills/:billId', billController.delete);
@@ -20,5 +19,5 @@ module.exports = app => {
   app.delete('/api/bills/:customerId/:billId', customersController.delete);
   app.post('/api/register', userController.create);
   app.post('/api/contacts/:userId', contactController.create);
-  app.get('/api/users', userController.list);
+  app.get('/api/users/:userId', userController.list);
 };
