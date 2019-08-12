@@ -5,8 +5,9 @@ module.exports = {
     try {
       const user = await User.create({
         firstName: req.body.firstName,
-        lastname: req.body.lastname,
-        email: req.body.email
+        lastName: req.body.lastName,
+        email: req.body.email,
+        clientId: req.body.clientId
       });
       return res.status(201).send(user);
     } catch (error) {
