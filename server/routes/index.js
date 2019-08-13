@@ -16,5 +16,6 @@ module.exports = app => {
   app.delete('/api/bills/:billId', billController.delete);
   app.post('/api/register', userController.create);
   app.get('/api/login/:clientId', userController.retrieve);
+  app.get('/api/contacts/:userId', contactController.list);
   app.post('/api/contacts/:userId', contactController.create);
 };

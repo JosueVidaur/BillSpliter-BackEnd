@@ -13,5 +13,17 @@ module.exports = {
     } catch (error) {
       return res.status(400).send(contact);
     }
+  },
+  async list(req, res) {
+    try {
+      const contacts = await Contact.findAll({
+        where: {
+          userId: req.params.userId
+        }
+      });
+      return res.status(200).send(contacts);
+    } catch (error) {
+      return res.status(400).send(error);
+    }
   }
 };
