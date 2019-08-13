@@ -1,5 +1,6 @@
 const Bill = require('../models').Bill;
 const Customers = require('../models').customers;
+const Sequelize = require('sequelize');
 
 module.exports = {
   async create(req, res) {
@@ -110,8 +111,18 @@ module.exports = {
           contactId: newCustomer.contactId
         });
       });
+      const Op = Sequelize.Op;
+      const ids = newCustomers.map(customer => customer.id);
+      customersToDelete = await Customers.findAll({
+        where: {
+          billId: req.params.billId,
+          id: { [Op.notIn]: ids }
+        }
+      });
+      customersToDelete.forEach(async customer => await customer.destroy());
       return res.status(200).send(bill);
     } catch (error) {
+      console.log(error);
       return res.status(400).send(error);
     }
   },

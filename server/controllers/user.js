@@ -16,5 +16,22 @@ module.exports = {
     } catch (error) {
       return res.status(400).send(error);
     }
+  },
+  async retrieve(req, res) {
+    try {
+      const user = await User.findOne({
+        where: {
+          clientId: req.params.clientId
+        }
+      });
+      if (!user) {
+        return res.status(404).send({
+          message: 'User doesn`t exist'
+        });
+      }
+      return res.status(200).send(user);
+    } catch (error) {
+      return res.status(400).send(error);
+    }
   }
 };
