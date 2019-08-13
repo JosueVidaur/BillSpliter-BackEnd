@@ -11,7 +11,6 @@ module.exports = {
       });
       return res.status(201).send(contact);
     } catch (error) {
-      console.log(error);
       return res.status(400).send(contact);
     }
   }

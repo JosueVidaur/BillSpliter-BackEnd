@@ -9,7 +9,6 @@ module.exports = {
           billId: req.params.billId
         }
       });
-      console.log(customer);
       if (!customer) {
         return res.status(404).send({
           message: 'Customer Not Found'

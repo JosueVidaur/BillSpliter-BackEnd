@@ -9,7 +9,6 @@ module.exports = {
         totalAmount: req.body.totalAmount,
         userId: req.params.userId
       });
-      console.log(typeof bill.id, bill);
       const contacts = req.body.contacts;
       contacts.forEach(
         async contact =>
@@ -82,7 +81,34 @@ module.exports = {
       }
       await bill.update({
         place: req.body.place,
-        totalAmount: req.body.totalAmount
+        totalAmount: req.body.totalAmount,
+        completed: req.body.completed
+      });
+      const newCustomers = req.body.contacts;
+      newCustomers.forEach(async newCustomer => {
+        customerToUpdate = await Customers.findOne({
+          where: {
+            id: newCustomer.id
+          }
+        });
+        if (!customerToUpdate) {
+          await Customers.create({
+            firstName: newCustomer.firstName,
+            lastName: newCustomer.lastName,
+            phone: newCustomer.phone,
+            amount: newCustomer.amount,
+            billId: req.params.billId,
+            contactId: newCustomer.contactId
+          });
+        }
+        await customerToUpdate.update({
+          firstName: newCustomer.firstName || customerToUpdate.firstName,
+          lastName: newCustomer.lastName || customerToUpdate.lastName,
+          phone: newCustomer.phone || customerToUpdate.phone,
+          amount: newCustomer.amount,
+          billId: req.params.billId,
+          contactId: newCustomer.contactId
+        });
       });
       return res.status(200).send(bill);
     } catch (error) {
@@ -92,7 +118,6 @@ module.exports = {
   async delete(req, res) {
     try {
       const bill = await Bill.findByPk(req.params.billId);
-      console.log('deleting', bill);
       if (!bill) {
         return res.status(404).send({
           message: 'Bill Not Found'
