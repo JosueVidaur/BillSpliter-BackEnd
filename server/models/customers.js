@@ -23,8 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
     });
     Customers.belongsTo(models.contact, {
-      foreignKey: 'contactId',
-      onDelete: 'CASCADE'
+      foreignKey: 'contactId'
     });
   };
   return Customers;

@@ -18,4 +18,5 @@ module.exports = app => {
   app.get('/api/login/:clientId', userController.retrieve);
   app.get('/api/contacts/:userId', contactController.list);
   app.post('/api/contacts/:userId', contactController.create);
+  app.delete('/api/contacts/:contactId', contactController.delete);
 };
