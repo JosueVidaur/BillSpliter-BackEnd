@@ -3,6 +3,85 @@ const Customers = require('../models').customers;
 const Sequelize = require('sequelize');
 
 module.exports = {
+  updateCustomers: async function(newCustomers, billCustomers) {
+    try {
+      let customersToUpdate = [];
+      billCustomers.forEach(billCustomer => {
+        const found = newCustomers.find(
+          customer => billCustomer.dataValues.id === customer.id
+        );
+        if (found) {
+          customersToUpdate.push(found);
+        }
+      });
+
+      Promise.all(
+        customersToUpdate.forEach(
+          async customerToUpdate =>
+            await Customers.update(
+              {
+                firstName: customerToUpdate.firstName,
+                lastName: customerToUpdate.lastName,
+                phone: customerToUpdate.phone,
+                amount: customerToUpdate.amount,
+                billId: customerToUpdate.billId,
+                contactId: customerToUpdate.contactId
+              },
+              { where: { id: customerToUpdate.id } }
+            )
+        )
+      );
+    } catch (error) {
+      throw error;
+    }
+  },
+  createCustomers: async function(newCustomers, billCustomers, billId) {
+    try {
+      let customersToCreate = [];
+      newCustomers.forEach(customer => {
+        const found = billCustomers.find(
+          billCustomer => billCustomer.dataValues.id === customer.id
+        );
+        if (!found) {
+          customersToCreate.push(customer);
+        }
+      });
+
+      Promise.all(
+        customersToCreate.forEach(
+          async customerToCreate =>
+            await Customers.create({
+              firstName: customerToCreate.firstName,
+              lastName: customerToCreate.lastName,
+              phone: customerToCreate.phone,
+              amount: customerToCreate.amount,
+              billId: billId,
+              contactId: customerToCreate.contactId
+            })
+        )
+      );
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  deleteCustomers: async function(newCustomers, billId) {
+    try {
+      const Op = Sequelize.Op;
+      const ids = newCustomers.map(customer => customer.id);
+      customersToDelete = await Customers.findAll({
+        where: {
+          billId,
+          id: { [Op.notIn]: ids }
+        }
+      });
+      Promise.all(
+        customersToDelete.forEach(async customer => await customer.destroy())
+      );
+    } catch (error) {
+      throw error;
+    }
+  },
   async create(req, res) {
     try {
       const bill = await Bill.create({
@@ -11,16 +90,18 @@ module.exports = {
         userId: req.params.userId
       });
       const contacts = req.body.contacts;
-      contacts.forEach(
-        async contact =>
-          await Customers.create({
-            firstName: contact.firstName,
-            lastName: contact.lastName,
-            phone: contact.phone,
-            amount: contact.amount,
-            billId: bill.id,
-            contactId: contact.contactId
-          })
+      Promise.all(
+        contacts.forEach(
+          async contact =>
+            await Customers.create({
+              firstName: contact.firstName,
+              lastName: contact.lastName,
+              phone: contact.phone,
+              amount: contact.amount,
+              billId: bill.id,
+              contactId: req.params.userId
+            })
+        )
       );
       return res.status(201).send(bill);
     } catch (error) {
@@ -65,7 +146,7 @@ module.exports = {
       return res.status(400).send(error);
     }
   },
-  async update(req, res) {
+  update: async function(req, res) {
     try {
       const bill = await Bill.findByPk(req.params.billId, {
         include: [
@@ -86,40 +167,14 @@ module.exports = {
         completed: req.body.completed
       });
       const newCustomers = req.body.contacts;
-      newCustomers.forEach(async newCustomer => {
-        customerToUpdate = await Customers.findOne({
-          where: {
-            id: newCustomer.id
-          }
-        });
-        if (!customerToUpdate) {
-          await Customers.create({
-            firstName: newCustomer.firstName,
-            lastName: newCustomer.lastName,
-            phone: newCustomer.phone,
-            amount: newCustomer.amount,
-            billId: req.params.billId,
-            contactId: newCustomer.contactId
-          });
-        }
-        await customerToUpdate.update({
-          firstName: newCustomer.firstName || customerToUpdate.firstName,
-          lastName: newCustomer.lastName || customerToUpdate.lastName,
-          phone: newCustomer.phone || customerToUpdate.phone,
-          amount: newCustomer.amount,
-          billId: req.params.billId,
-          contactId: newCustomer.contactId
-        });
-      });
-      const Op = Sequelize.Op;
-      const ids = newCustomers.map(customer => customer.id);
-      customersToDelete = await Customers.findAll({
-        where: {
-          billId: req.params.billId,
-          id: { [Op.notIn]: ids }
-        }
-      });
-      customersToDelete.forEach(async customer => await customer.destroy());
+      await module.exports.updateCustomers(newCustomers, bill.customers);
+      await module.exports.createCustomers(
+        newCustomers,
+        bill.customers,
+        bill.id
+      );
+      await module.exports.deleteCustomers(newCustomers, req.params.billId);
+
       return res.status(200).send(bill);
     } catch (error) {
       console.log(error);
