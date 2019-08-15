@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "nodemon ./bin/www",
-    "test": "mocha \"server/test\" --timeout 10000"
+    "test": "mocha \"server/test\" --timeout 10000",
+    "start": "node ./bin/www"
   },
   "repository": {
     "type": "git",
